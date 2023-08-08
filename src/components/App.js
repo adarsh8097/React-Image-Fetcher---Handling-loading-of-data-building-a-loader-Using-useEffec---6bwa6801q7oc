@@ -1,46 +1,48 @@
-import React from 'react'
+import React, { useState } from 'react'
 import '../styles/App.css';
 import { Loader } from './Loader';
 import { PhotoFrame } from './PhotoFrame';
 const App = () => {
 
-    const [number, setNumber] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const [photoData, setPhotoData] = useState(null);
-  
-    const handleInputChange = (event) => {
-      setNumber(event.target.value);
-    };
+  const[imageId, setImageId] = useState('');
+  const[isLoading, setisLoding] = useState(false);
+  const[imageInfo,setImageInfo] = useState({});
+ 
+  let handleChange =(ev)=>{
+    //console.log(ev.target.value);
+    const {value} =ev.target;
+    const fetchImage = async(id)=>{
+
+      try{
+        setisLoding(true);
+        const res = await fetch(`https://jsonplaceholder.typicode.com/photos/${id}`)
+        const data = await res.json();
+         // console.log(data);
+          setisLoding(false);
+          setImageInfo(data);
+         console.log(data);
+
+      }
+      catch(err){
+        setisLoding(false);
+        console.log(err);
+
+      }
+    }
+    setImageId(value);
+    fetchImage(value);
     
-    const fetchData = () => {
-        setIsLoading(true);
-        fetch(`https://jsonplaceholder.typicode.com/photos/${id}`)
-          .then((response) => response.json())
-          .then((data) => {
-            setPhotoData(data);
-            setIsLoading(false);
-          })
-          .catch((error) => {
-            console.error('Error fetching data:', error);
-            setIsLoading(false);
-          });
-      };
+  }
     
 
     return(
-        <div className= "photofram">
-      <input
-        type="number"
-        value={number}
-        onChange={handleInputChange}
-        placeholder="Enter a number between 1-5000"
-      />
-      <button onClick={fetchData}>Fetch Data</button>
-      {isLoading ? <Loader /> : null}
-      {photoData && !isLoading ? (
-        <PhotoFrame url={photoData.url} title={photoData.title} />
-      ) : null}
-    </div>
+       <div>
+        <label htmlFor='imageId'>Id number</label>
+        <input type="number" onChange={handleChange} value={imageId} />
+       {
+         isLoading ? <Loader /> : imageId && < PhotoFrame url={imageInfo.url} title={imageInfo.title}/>
+       }
+       </div>
     )
   
 }
