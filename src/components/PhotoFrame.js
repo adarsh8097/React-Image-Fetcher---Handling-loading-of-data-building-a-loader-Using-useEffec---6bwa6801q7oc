@@ -4,7 +4,7 @@ export const PhotoFrame = (url,title) => {
     
    return( 
     <div className="photoframe">
-        <img src={url} alt={title}></img>
+        <img src={url}></img>
         <div className="caption">{title}</div>
     </div>
    );
