@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const PhotoFrame = (url,title) => {
+export const PhotoFrame = ({url,title}) => {
     
    return( 
     <div className="photoframe">
